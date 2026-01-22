@@ -1,23 +1,55 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from "react";
+import "./App.css";
 
 function App() {
+  const [file, setFile] = useState(null);
+  const [result, setResult] = useState("");
+
+  const handleFileChange = (e) => {
+    setFile(e.target.files[0]);
+  };
+
+  const handleUpload = async () => {
+    if (!file) {
+      alert("Please select a prescription image first!");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+      const res = await fetch("http://localhost:8000/scan", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await res.json();
+      setResult(data.raw_text || "No text found");
+    } catch (err) {
+      console.error(err);
+      alert("Error connecting to backend");
+    }
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+      <header>
+        <h1>MediRead Prescription Reader</h1>
+        <p>Upload prescription images and get extracted medicines</p>
       </header>
+
+      <main>
+        <input type="file" onChange={handleFileChange} accept="image/*" />
+        <button onClick={handleUpload}>Scan Prescription</button>
+
+        {result && (
+          <div className="result">
+            <h2>Extracted Text:</h2>
+            <pre>{result}</pre>
+          </div>
+        )}
+      </main>
     </div>
   );
 }
