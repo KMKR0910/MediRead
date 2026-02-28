@@ -1,25 +1,23 @@
-from fastapi import FastAPI, File, UploadFile
+from fastapi import FastAPI,File,UploadFile
 from fastapi.middleware.cors import CORSMiddleware
-from ocr import read_prescription
-from database import save_prescription
+from ocr import read_prscription
+from database import save_to_db
 
-app = FastAPI(title="MediRead API")
 
-# Allow React frontend
+
+
+app = FastAPI(title ="MediRead API")
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],
+    allo_origins=["http://localhost:3000"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
 @app.post("/scan")
-async def scan_prescription(file: UploadFile = File(...)):
-    text, medicines = read_prescription(file)
-    save_prescription(text, medicines)
-
-    return {
-        "raw_text": text,
-        "medicines": medicines
-    }
+async def scan(file:UploadFile =File(...)):
+    text, mediicines = read_prscription(file)
+    save_to_db(text, mediicines)
+    return {"raw_text": text,"medicines":medicines}
