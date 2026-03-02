@@ -1,15 +1,12 @@
+import os
 from pymongo import MongoClient
+from dotenv import load_dotenv
 
-client = MongoClient("mongodb://localhost:27017")
+load_dotenv()
 
-db = client.mediread
+MONGO_URI = os.getenv("MONGO_URI", "mongodb://localhost:27017")
+DB_NAME = os.getenv("DB_NAME", "mediread")
 
-collection = db.prescriptions
-
-def save_prescriptions(text,medicines):
-   collection.insert_one({
-      "raw_text":text,
-      "medicines":medicines
-   
-   })
-
+client = MongoClient(MONGO_URI)
+db = client[DB_NAME]
+prescriptions_collection = db["prescriptions"]
