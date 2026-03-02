@@ -6,4 +6,6 @@ numpy
 pillow
 pymongo
 python-multipart
-  
+spacy
+python-dotenv
+motor
