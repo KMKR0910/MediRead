@@ -1,4 +1,4 @@
-from jose import JWTError, jwt
+"""from jose import JWTError, jwt
 from datetime import datetime, timedelta
 
 SECRET_KEY ="sppersecretkey"
@@ -14,3 +14,4 @@ def create_access_token(data:dict):
     encodeed_jwt =jwt.encode(to_encode,SECRET_KEY,algorithm=ALGORITHM)
 
     return encodeed_jwt
+"""
