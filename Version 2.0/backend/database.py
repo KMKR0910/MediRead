@@ -1,11 +1,7 @@
 from pymongo import MongoClient
-from collections import text ,medicines
 
-client = MongoClient("mongodb://localhost:27017/")
-db = client["mediread"]
-collection = db["prescriptions"]
+client = MongoClient("mongodb://mediread_user:1234@localhost:27017/mediread_db")
 
-collection.insert_one({
-    "text": text,
-    "medicines": medicines
-})
+db = client["mediread_db"]
+
+prescriptions = db["prescriptions"]
