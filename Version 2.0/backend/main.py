@@ -1,6 +1,8 @@
 from fastapi import FastAPI, UploadFile, File
 from ocr import extract_text
 from ner_model import extract_medical_entities
+from database import prescriptions
+from bson import ObjectId  
 
 
 app = FastAPI()
@@ -18,9 +20,27 @@ async def upload_prescription(file: UploadFile = File(...)):
 async def analyze_prescription(file: UploadFile = File(...)):
     contents = await file.read()
     text = extract_text(contents)
-    medicines = extract_medical_entities(text)
+    entities = extract_medical_entities(text)
 
-    return {
+
+    data = {
         "raw_text": text,
-        "structred_data": medicines
+        "structured_data": entities
     }
+
+
+    result = prescriptions.insert_one(data)
+    data["_id"] =str(result.inserted_id)
+
+    return data
+
+@app.get("/prescriptions")
+def get_prescriptions():
+
+    results = []
+
+    for item in prescriptions.find():
+        item["_id"]=str(item["_id"])
+        results.append(item)
+
+    return results
