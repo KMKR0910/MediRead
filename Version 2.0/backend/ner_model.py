@@ -22,9 +22,12 @@ def extract_medical_entities(text):
         if keyowrd.lower() in text.lower():
             frequencies.append(keyowrd)
 
+    medicine_suffixes = ["ol","cin","ine","ide","ate"]
+
     words = text.split()
     for word in words:
-        if word.istitle() and len(word)>3 :
+        for suffix in medicine_suffixes:
+         if word.lower().endswith(suffix) :
             drugs.append(word)
 
     return{
