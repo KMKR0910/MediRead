@@ -1,7 +1,6 @@
 from fastapi import FastAPI, UploadFile, File
 from ocr import extract_text
-from ner_model import extract_medicine_entities
-
+from ner_model import extract_medical_entities
 
 
 app = FastAPI()
@@ -19,9 +18,9 @@ async def upload_prescription(file: UploadFile = File(...)):
 async def analyze_prescription(file: UploadFile = File(...)):
     contents = await file.read()
     text = extract_text(contents)
-    medicines = extract_medicine_entities(text)
+    medicines = extract_medical_entities(text)
 
     return {
-        "text": text,
-        "medicines": medicines
+        "raw_text": text,
+        "structred_data": medicines
     }

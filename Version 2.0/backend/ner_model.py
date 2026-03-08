@@ -1,13 +1,37 @@
-import spacy
+import re
 
-nlp = spacy.load("en_core_web_sm")
+def extract_medical_entities(text):
+    drugs = []
+    dosages =[]
+    frequencies =[]
 
-def extract_medicine_entities(text):
-    doc = nlp(text)
+    dosage_pattern = r'\b\d+\s?(mg|ml|g|tablets?)\b'
+    dosages = re.findall(dosage_pattern,text,re.IGNORECASE)
 
-    medicines = []
-    for ent in doc.ents:
-        if ent.label_ in ["ORG", "PRODUCT"]:
-            medicines.append(ent.text)
 
-    return medicines
+    frequency_keywords = [
+        "once_daily"
+        "twice daily"
+        "three time daily"
+        "after meals"
+        "before meals"
+        "daily"
+    ]
+
+    for keyowrd in frequency_keywords:
+        if keyowrd.lower() in text.lower():
+            frequencies.append(keyowrd)
+
+    words = text.split()
+    for word in words:
+        if word.istitle() and len(word)>3 :
+            drugs.append(word)
+
+    return{
+        "drugs": drugs,
+        "dosages":dosages,
+        "frequencies":frequencies
+    }
+
+
+
