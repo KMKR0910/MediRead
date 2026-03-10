@@ -12,6 +12,20 @@ function PrescriptionHistory() {
 
   }, []);
 
+
+//   useEffect(() => {
+
+//   fetch("https://localhost:8244/mediread/1.0.0/prescriptions", {
+//     headers: {
+//       Authorization: "Bearer xxxxxxx"
+//     }
+//   })
+//     .then(res => res.json())
+//     .then(data => setData(data));
+
+// }, []);
+  
+
   return (
 
     <div>
