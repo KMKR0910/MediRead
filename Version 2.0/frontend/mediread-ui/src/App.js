@@ -1,4 +1,3 @@
-import React from "react";
 import UploadPrescription from "./Components/UploadPrescription";
 import PrescriptionHistory from "./Components/PrescriptionHistory";
 
@@ -6,15 +5,21 @@ function App() {
 
   return (
 
-    <div style={{padding:"30px"}}>
+    <div className="min-h-screen bg-gray-100">
 
-      <h1>MediRead – AI Prescription Reader</h1>
+      <header className="bg-blue-600 text-white p-4 shadow-md">
+        <h1 className="text-2xl font-bold text-center">
+          MediRead – AI Prescription Reader
+        </h1>
+      </header>
 
-      <UploadPrescription />
+      <div className="max-w-4xl mx-auto p-6">
 
-      <hr />
+        <UploadPrescription />
 
-      <PrescriptionHistory />
+        <PrescriptionHistory />
+
+      </div>
 
     </div>
 
