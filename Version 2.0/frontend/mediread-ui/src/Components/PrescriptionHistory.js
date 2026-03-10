@@ -28,21 +28,42 @@ function PrescriptionHistory() {
 
   return (
 
-    <div>
+    <div className="bg-white p-6 rounded-xl shadow-md">
 
-      <h2>Prescription History</h2>
+      <h2 className="text-xl font-semibold mb-4">
+        Prescription History
+      </h2>
+
+      {data.length === 0 && (
+        <p>No prescriptions uploaded yet.</p>
+      )}
 
       {data.map((item, index) => (
 
-        <div key={index} style={{border:"1px solid gray",margin:"10px",padding:"10px"}}>
+        <div
+          key={index}
+          className="border p-4 rounded mb-3 bg-gray-50"
+        >
 
-          <p><b>Text:</b> {item.raw_text}</p>
+          <p className="text-sm text-gray-600">
+            {item.raw_text}
+          </p>
 
-          <p><b>Drugs:</b> {item.structured_data.drugs.join(", ")}</p>
+          <div className="flex gap-4 mt-2 text-sm">
 
-          <p><b>Dosages:</b> {item.structured_data.dosages.join(", ")}</p>
+            <span className="text-blue-600">
+              Drugs: {item.structured_data.drugs.join(", ")}
+            </span>
 
-          <p><b>Frequency:</b> {item.structured_data.frequencies.join(", ")}</p>
+            <span className="text-green-600">
+              Dosage: {item.structured_data.dosages.join(", ")}
+            </span>
+
+            <span className="text-yellow-600">
+              Frequency: {item.structured_data.frequencies.join(", ")}
+            </span>
+
+          </div>
 
         </div>
 
@@ -54,3 +75,6 @@ function PrescriptionHistory() {
 }
 
 export default PrescriptionHistory;
+
+
+
