@@ -1,0 +1,5 @@
+**/venv/
+**/.venv/
+**/rxvision_env/
+__pycache__/
+*.pyc
