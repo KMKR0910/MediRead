@@ -1,40 +1,43 @@
 import re
 
+# load drug list
+with open("dataset/drug_list.txt") as f:
+    drug_list = [line.strip() for line in f]
+
+
 def extract_medical_entities(text):
+
+    text_lower = text.lower()
+
     drugs = []
-    dosages =[]
-    frequencies =[]
+    dosages = []
+    frequencies = []
 
-    dosage_pattern = r'\b\d+\s?(mg|ml|g|tablets?)\b'
-    dosages = re.findall(dosage_pattern,text,re.IGNORECASE)
+    # Drug detection
+    for drug in drug_list:
+        if drug in text_lower:
+            drugs.append(drug)
 
+    # Dosage pattern
+    dosage_pattern = r'\b\d+\s?(mg|ml|g)\b'
+    dosages = re.findall(dosage_pattern, text_lower)
 
-    frequency_keywords = [
-        "once_daily"
-        "twice daily"
-        "three time daily"
-        "after meals"
-        "before meals"
+    # Frequency keywords
+    frequency_words = [
+        "once daily",
+        "twice daily",
+        "three times daily",
+        "after meals",
+        "before meals",
         "daily"
     ]
 
-    for keyowrd in frequency_keywords:
-        if keyowrd.lower() in text.lower():
-            frequencies.append(keyowrd)
+    for word in frequency_words:
+        if word in text_lower:
+            frequencies.append(word)
 
-    medicine_suffixes = ["ol","cin","ine","ide","ate"]
-
-    words = text.split()
-    for word in words:
-        for suffix in medicine_suffixes:
-         if word.lower().endswith(suffix) :
-            drugs.append(word)
-
-    return{
+    return {
         "drugs": drugs,
-        "dosages":dosages,
-        "frequencies":frequencies
+        "dosages": dosages,
+        "frequencies": frequencies
     }
-
-
-

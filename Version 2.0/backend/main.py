@@ -4,6 +4,7 @@ from ner_model import extract_medical_entities
 from database import prescriptions
 from bson import ObjectId  
 from fastapi.middleware.cors import CORSMiddleware
+from textblob import TextBlob
 
 
 app = FastAPI()
@@ -35,11 +36,13 @@ async def upload_prescription(file: UploadFile = File(...)):
 async def analyze_prescription(file: UploadFile = File(...)):
     contents = await file.read()
     text = extract_text(contents)
-    entities = extract_medical_entities(text)
+    corrected_text = str(TextBlob(text).correct())
+    entities = extract_medical_entities(corrected_text)
 
 
     data = {
         "raw_text": text,
+        "corrected_text": corrected_text,
         "structured_data": entities
     }
 
