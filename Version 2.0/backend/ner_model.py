@@ -19,7 +19,7 @@ def extract_medical_entities(text):
             drugs.append(drug)
 
     # Dosage pattern
-    dosage_pattern = r'\b\d+\s?(mg|ml|g)\b'
+    dosage_pattern = r"\b\d+(?:\.\d+)?\s?(?:mg|ml|mcg|g|iu|units?)\b"
     dosages = re.findall(dosage_pattern, text_lower)
 
     # Frequency keywords

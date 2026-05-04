@@ -2,16 +2,15 @@ from fastapi import FastAPI, UploadFile, File
 from ocr import extract_text
 from ner_model import extract_medical_entities
 from database import prescriptions
-from bson import ObjectId  
+from bson import ObjectId
 from fastapi.middleware.cors import CORSMiddleware
 from textblob import TextBlob
-
 
 app = FastAPI()
 
 origins = [
     "http://localhost:3000",
-    "http://127.0.0.1:3000"
+    "http://127.0.0.1:3000",
 ]
 
 app.add_middleware(
@@ -27,38 +26,44 @@ app.add_middleware(
 async def upload_prescription(file: UploadFile = File(...)):
     contents = await file.read()
     text = extract_text(contents)
-    
-    return {
-        "extracted_text": text
-    }
+    return {"extracted_text": text}
+
 
 @app.post("/analyze")
 async def analyze_prescription(file: UploadFile = File(...)):
     contents = await file.read()
-    text = extract_text(contents)
-    corrected_text = str(TextBlob(text).correct())
-    entities = extract_medical_entities(corrected_text)
 
+    #  OCR
+    raw_text = extract_text(contents)
 
+    # Spell-correction 
+    try:
+        corrected_text = str(TextBlob(raw_text).correct())
+    except Exception:
+        corrected_text = raw_text
+
+    # 3. NER extraction (run on corrected text; fall back to raw on failure)
+    try:
+        entities = extract_medical_entities(corrected_text)
+    except Exception:
+        entities = extract_medical_entities(raw_text)
+
+    # to save db
     data = {
-        "raw_text": text,
+        "raw_text": raw_text,
         "corrected_text": corrected_text,
-        "structured_data": entities
+        "structured_data": entities,
     }
-
-
     result = prescriptions.insert_one(data)
-    data["_id"] =str(result.inserted_id)
+    data["_id"] = str(result.inserted_id)
 
     return data
 
+
 @app.get("/prescriptions")
 def get_prescriptions():
-
     results = []
-
     for item in prescriptions.find():
-        item["_id"]=str(item["_id"])
+        item["_id"] = str(item["_id"])
         results.append(item)
-
     return results

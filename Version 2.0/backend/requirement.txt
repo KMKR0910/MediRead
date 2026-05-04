@@ -1,7 +1,11 @@
-fastapi 
-uvicorn 
-pillow 
-pytesseract
+fastapi
+uvicorn[standard]
 python-multipart
-spacy
 pymongo
+textblob
+easyocr
+opencv-python-headless
+numpy
+pillow
+spacy
+
