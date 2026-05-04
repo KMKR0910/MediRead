@@ -1,80 +1,74 @@
 import React, { useEffect, useState } from "react";
 
 function PrescriptionHistory() {
-
   const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-
     fetch("http://127.0.0.1:8000/prescriptions")
-      .then(res => res.json())
-      .then(data => setData(data));
-
+      .then((res) => {
+        if (!res.ok) throw new Error(`Server error: ${res.status}`);
+        return res.json();
+      })
+      .then((json) => setData(json))
+      .catch((err) => setError(err.message))
+      .finally(() => setLoading(false));
   }, []);
 
-
-//   useEffect(() => {
-
-//   fetch("https://localhost:8244/mediread/1.0.0/prescriptions", {
-//     headers: {
-//       Authorization: "Bearer xxxxxxx"
-//     }
-//   })
-//     .then(res => res.json())
-//     .then(data => setData(data));
-
-// }, []);
-  
+  if (loading) return <p className="text-center text-gray-500 mt-6">Loading history…</p>;
+  if (error)   return <p className="text-center text-red-500 mt-6">Error: {error}</p>;
 
   return (
-
     <div className="bg-white p-6 rounded-xl shadow-md">
-
-      <h2 className="text-xl font-semibold mb-4">
-        Prescription History
-      </h2>
+      <h2 className="text-xl font-semibold mb-4">Prescription History</h2>
 
       {data.length === 0 && (
-        <p>No prescriptions uploaded yet.</p>
+        <p className="text-gray-500">No prescriptions uploaded yet.</p>
       )}
 
-      {data.map((item, index) => (
+      {data.map((item, index) => {
+        const sd = item.structured_data || {};
+        return (
+          <div key={index} className="border p-4 rounded mb-3 bg-gray-50">
+            {/* Raw OCR text */}
+            <p className="text-sm text-gray-600 mb-2 whitespace-pre-wrap">
+              {item.raw_text}
+            </p>
 
-        <div
-          key={index}
-          className="border p-4 rounded mb-3 bg-gray-50"
-        >
+            <div className="flex flex-wrap gap-3 mt-2 text-sm">
+              <span className="text-blue-600">
+                <b>💊 Drugs:</b>{" "}
+                {sd.drugs?.length ? sd.drugs.join(", ") : <i>none</i>}
+              </span>
 
-          <p className="text-sm text-gray-600">
-            {item.raw_text}
-          </p>
+              <span className="text-green-600">
+                <b>⚖️ Dosage:</b>{" "}
+                {sd.dosages?.length ? sd.dosages.join(", ") : <i>none</i>}
+              </span>
 
-          <div className="flex gap-4 mt-2 text-sm">
+              <span className="text-yellow-600">
+                <b>🔁 Frequency:</b>{" "}
+                {sd.frequencies?.length ? sd.frequencies.join(", ") : <i>none</i>}
+              </span>
 
-            <span className="text-blue-600">
-              Drugs: {item.structured_data.drugs.join(", ")}
-            </span>
+              {sd.duration?.length > 0 && (
+                <span className="text-purple-600">
+                  <b>📅 Duration:</b> {sd.duration.join(", ")}
+                </span>
+              )}
 
-            <span className="text-green-600">
-              Dosage: {item.structured_data.dosages.join(", ")}
-            </span>
-
-            <span className="text-yellow-600">
-              Frequency: {item.structured_data.frequencies.join(", ")}
-            </span>
-
+              {sd.instructions?.length > 0 && (
+                <span className="text-red-500">
+                  <b>⚠️ Instructions:</b> {sd.instructions.join(", ")}
+                </span>
+              )}
+            </div>
           </div>
-
-        </div>
-
-      ))}
-
+        );
+      })}
     </div>
-
   );
 }
 
 export default PrescriptionHistory;
-
-
-

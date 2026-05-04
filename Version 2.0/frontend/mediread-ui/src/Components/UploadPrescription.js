@@ -61,18 +61,24 @@ function UploadPrescription() {
           <div className="grid grid-cols-3 gap-4 mt-2">
 
             <div className="bg-blue-100 p-3 rounded">
-              <b>Drugs</b>
-              <p>{result.structured_data.drugs.join(", ")}</p>
+              <b>💊 Drugs</b>
+              {result.structured_data.drugs.map((drug, i) => (
+                <p key={i}>{drug}</p>
+              ))}
             </div>
 
             <div className="bg-green-100 p-3 rounded">
-              <b>Dosage</b>
-              <p>{result.structured_data.dosages.join(", ")}</p>
+              <b>⚖️ Dosage</b>
+              {result.structured_data.dosages.map((dose, i) => (
+                <p key={i}>{dose}</p>
+              ))}
             </div>
 
             <div className="bg-yellow-100 p-3 rounded">
-              <b>Frequency</b>
-              <p>{result.structured_data.frequencies.join(", ")}</p>
+              <b>🔁 Frequency</b>
+              {result.structured_data.frequencies.map((freq, i) => (
+                <p key={i}>{freq}</p>
+              ))}
             </div>
 
           </div>
@@ -87,6 +93,3 @@ function UploadPrescription() {
 }
 
 export default UploadPrescription;
-
-
-
