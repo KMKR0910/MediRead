@@ -17,6 +17,9 @@ MediRead automates the reading of medical prescriptions by combining OCR and NLP
 
 ---
 
+### 🔹 Version 1.0 – Initial Prototype
+### ✅ Version 2.0 – Current stable version
+
 ##  Features
 
 -  Upload prescription images (photo or scan)
