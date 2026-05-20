@@ -71,14 +71,14 @@ MediRead automates the reading of medical prescriptions by combining OCR and NLP
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/your-username/mediread.git
+git clone https://github.com/KMKR0910/MediRead.git
 cd mediread
 ```
 
 ### 2. Backend Setup
 
 ```bash
-cd backend
+cd "Version 2.0/backend"
 pip install -r requirements.txt
 uvicorn main:app --reload
 ```
@@ -88,7 +88,7 @@ uvicorn main:app --reload
 ### 3. Frontend Setup
 
 ```bash
-cd frontend
+cd "Version 2.0/frontend"
 npm install
 npm start
 ```
