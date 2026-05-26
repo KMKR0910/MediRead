@@ -15,10 +15,7 @@
 
 MediRead automates the reading of medical prescriptions by combining OCR and NLP. Users simply upload a prescription image and the system identifies medicines, dosage, and frequency — making prescriptions accessible and easy to understand for everyone.
 
----
 
-### 🔹 Version 1.0 – Initial Prototype
-### ✅ Version 2.0 – Current stable version
 
 ##  Features
 
@@ -78,7 +75,7 @@ cd mediread
 ### 2. Backend Setup
 
 ```bash
-cd "Version 2.0/backend"
+cd backend
 pip install -r requirements.txt
 uvicorn main:app --reload
 ```
@@ -88,7 +85,7 @@ uvicorn main:app --reload
 ### 3. Frontend Setup
 
 ```bash
-cd "Version 2.0/frontend"
+cd frontend/mediread-ui
 npm install
 npm start
 ```
