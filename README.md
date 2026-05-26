@@ -120,7 +120,7 @@ pillow
 ## 📸 Screenshots
 
 
-![UI](Version%202.0/ui/mediraed%202.png)
+![UI](ui/mediraed%202.png)
 
 
 ---
